@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SQL Query Compiler & Execution Plan Visualizer</title>
+    <!-- Outfit and Fira Code Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Mermaid.js for tree visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            theme: 'dark',
+            startOnLoad: false,
+            securityLevel: 'loose',
+            flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
+        });
+    </script>
+</head>
+<body>
+    <div class="glass-bg"></div>
+
+    <header class="app-header">
+        <div class="logo">
+            <i class="fa-solid fa-microchip logo-icon"></i>
+            <div>
+                <h1>SQL Query Compiler</h1>
+                <p>Educational Compiler Construction Visualizer</p>
+            </div>
+        </div>
+        <div class="status-panel">
+            <div class="status-badge" id="engine-badge">
+                <span class="pulse-indicator orange"></span>
+                <span class="badge-text">Engine: Offline</span>
+            </div>
+            <div class="status-badge" id="compile-badge">
+                <span class="pulse-indicator"></span>
+                <span class="badge-text">Status: Idle</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <!-- LEFT SIDE: EDITOR & SCHEMA -->
+        <section class="editor-section">
+            <div class="card editor-card">
+                <div class="card-header">
+                    <h2><i class="fa-solid fa-code"></i> SQL Query Editor</h2>
+                    <div class="preset-selector">
+                        <select id="preset-queries">
+                            <option value="">-- Load Sample Query --</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="editor-container">
+                    <div class="line-numbers" id="line-numbers">1</div>
+                    <div class="editor-wrapper">
+                        <pre class="highlight-overlay" id="highlight-overlay" aria-hidden="true"></pre>
+                        <textarea id="sql-editor" spellcheck="false" placeholder="SELECT column_list FROM table_name WHERE condition ORDER BY column LIMIT number;"></textarea>
+                    </div>
+                </div>
+                <div class="editor-actions">
+                    <button class="btn btn-secondary" id="btn-clear"><i class="fa-solid fa-eraser"></i> Clear</button>
+                    <button class="btn btn-primary" id="btn-run"><i class="fa-solid fa-play"></i> Compile Query</button>
+                </div>
+            </div>
+
+            <div class="card schema-card">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="schema-browse"><i class="fa-solid fa-database"></i> Schema Browser</button>
+                    <button class="tab-btn" data-tab="schema-edit"><i class="fa-solid fa-pen-to-square"></i> Edit Schema</button>
+                </div>
+                <div class="tab-content active" id="schema-browse">
+                    <div id="schema-tree" class="schema-tree">
+                        <!-- Populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="tab-content" id="schema-edit">
+                    <textarea id="schema-json-editor" spellcheck="false"></textarea>
+                    <button class="btn btn-primary btn-sm" id="btn-save-schema"><i class="fa-solid fa-floppy-disk"></i> Save Schema</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- RIGHT SIDE: PIPELINE & VIEWER -->
+        <section class="pipeline-section">
+            <div class="pipeline-stepper card">
+                <div class="step-container">
+                    <div class="step-node active" data-view="step-tokens">
+                        <div class="step-icon"><i class="fa-solid fa-list"></i></div>
+                        <div class="step-label">Lexer</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-view="step-ast">
+                        <div class="step-icon"><i class="fa-solid fa-sitemap"></i></div>
+                        <div class="step-label">AST</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-view="step-semantic">
+                        <div class="step-icon"><i class="fa-solid fa-circle-check"></i></div>
+                        <div class="step-label">Semantic</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-view="step-query-tree">
+                        <div class="step-icon"><i class="fa-solid fa-tree"></i></div>
+                        <div class="step-label">Query Tree</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-view="step-optimizer">
+                        <div class="step-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                        <div class="step-label">Optimizer</div>
+                    </div>
+                    <div class="step-line"></div>
+                    <div class="step-node" data-view="step-execution">
+                        <div class="step-icon"><i class="fa-solid fa-gears"></i></div>
+                        <div class="step-label">Exec Plan</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DYNAMIC RESULT STAGE VIEWERS -->
+            <div class="viewer-container card">
+                <!-- STEP 1: TOKENS -->
+                <div class="stage-view active" id="step-tokens">
+                    <div class="stage-header">
+                        <h3>Lexical Token Table</h3>
+                        <div class="filter-box">
+                            <input type="text" id="token-filter" placeholder="Filter tokens...">
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table id="token-table">
+                            <thead>
+                                <tr>
+                                    <th>Index</th>
+                                    <th>Token Class</th>
+                                    <th>Lexeme (Value)</th>
+                                    <th>Line</th>
+                                    <th>Column</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="5" class="placeholder-row">No compiled query data. Click 'Compile Query' to execute.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- STEP 2: AST -->
+                <div class="stage-view" id="step-ast">
+                    <div class="stage-header">
+                        <h3>Abstract Syntax Tree (AST) Visualization</h3>
+                    </div>
+                    <div class="diagram-container">
+                        <div id="ast-diagram" class="mermaid-target">
+                            <!-- AST graphic -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: SEMANTIC -->
+                <div class="stage-view" id="step-semantic">
+                    <div class="stage-header">
+                        <h3>Semantic Validation & Symbol Table</h3>
+                    </div>
+                    <div class="semantic-grid">
+                        <div class="semantic-status-card" id="semantic-status-card">
+                            <div class="status-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                            <h4 id="semantic-status-title">Awaiting Query...</h4>
+                            <p id="semantic-status-desc">Run a compiler execution to validate query semantics against active schema.</p>
+                        </div>
+                        <div class="symbol-table-viewer">
+                            <h4>Resolved Symbol Table Entry</h4>
+                            <div id="resolved-symbol-table">
+                                <p class="muted">No symbols resolved yet.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="error-warning-lists">
+                        <div class="err-warn-card error-list">
+                            <h4><i class="fa-solid fa-circle-xmark text-danger"></i> Errors</h4>
+                            <ul id="semantic-errors">
+                                <li class="muted">None</li>
+                            </ul>
+                        </div>
+                        <div class="err-warn-card warning-list">
+                            <h4><i class="fa-solid fa-triangle-exclamation text-warning"></i> Warnings</h4>
+                            <ul id="semantic-warnings">
+                                <li class="muted">None</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: QUERY TREE -->
+                <div class="stage-view" id="step-query-tree">
+                    <div class="stage-header">
+                        <h3>Relational Algebra Query Tree</h3>
+                    </div>
+                    <div class="diagram-container">
+                        <div id="query-tree-diagram" class="mermaid-target"></div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: OPTIMIZER -->
+                <div class="stage-view" id="step-optimizer">
+                    <div class="stage-header">
+                        <h3>Relational Algebra Query Optimization</h3>
+                    </div>
+                    <div class="optimizer-grid">
+                        <div class="opt-rules-card">
+                            <h4>Applied Optimization Rules</h4>
+                            <ul id="opt-rules-list">
+                                <li class="muted">No query optimized yet.</li>
+                            </ul>
+                        </div>
+                        <div class="opt-diagrams">
+                            <div class="opt-diagram-pane">
+                                <h5>Optimized Relational Algebra Tree</h5>
+                                <div id="opt-tree-diagram" class="mermaid-target"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 6: EXECUTION PLAN -->
+                <div class="stage-view" id="step-execution">
+                    <div class="stage-header">
+                        <h3>Physical Execution Plan & Bytecode</h3>
+                    </div>
+                    <div class="exec-plan-grid">
+                        <div class="exec-operators">
+                            <h4>Physical Operator Steps</h4>
+                            <div id="exec-ops-list">
+                                <p class="muted">Awaiting compiler execution...</p>
+                            </div>
+                        </div>
+                        <div class="bytecode-card">
+                            <h4>Generated Pseudo Bytecode</h4>
+                            <pre><code id="bytecode-output" class="language-bytecode">-- No bytecode generated --</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Interactive SQL Compiler. Built using Flex, Bison, C, and Flask.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

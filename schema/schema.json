@@ -1,0 +1,44 @@
+{
+  "tables": {
+    "students": {
+      "columns": {
+        "id": "INT",
+        "name": "VARCHAR",
+        "age": "INT",
+        "gpa": "FLOAT",
+        "is_active": "BOOLEAN"
+      },
+      "data": [
+        { "id": 1, "name": "Alice Smith", "age": 20, "gpa": 3.8, "is_active": "TRUE" },
+        { "id": 2, "name": "Bob Jones", "age": 19, "gpa": 3.2, "is_active": "FALSE" },
+        { "id": 3, "name": "Charlie Brown", "age": 22, "gpa": 3.9, "is_active": "TRUE" }
+      ]
+    },
+    "employees": {
+      "columns": {
+        "id": "INT",
+        "name": "VARCHAR",
+        "salary": "FLOAT",
+        "department": "VARCHAR",
+        "is_active": "BOOLEAN"
+      },
+      "data": [
+        { "id": 101, "name": "Diana Prince", "salary": 75000.0, "department": "HR", "is_active": "TRUE" },
+        { "id": 102, "name": "Bruce Wayne", "salary": 120000.0, "department": "R&D", "is_active": "TRUE" },
+        { "id": 103, "name": "Clark Kent", "salary": 45000.0, "department": "Editorial", "is_active": "FALSE" }
+      ]
+    },
+    "courses": {
+      "columns": {
+        "course_id": "INT",
+        "title": "VARCHAR",
+        "credits": "INT"
+      },
+      "data": [
+        { "course_id": 301, "title": "Database Systems", "credits": 4 },
+        { "course_id": 302, "title": "Compiler Construction", "credits": 4 },
+        { "course_id": 303, "title": "Operating Systems", "credits": 3 }
+      ]
+    }
+  }
+}

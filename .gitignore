@@ -1,0 +1,28 @@
+# Compiled C files
+backend/compiler/*.exe
+backend/compiler/lex.yy.c
+backend/compiler/parser.tab.c
+backend/compiler/parser.tab.h
+
+# Python files
+__pycache__/
+*.pyc
+.env
+.venv/
+env/
+venv/
+
+# Outputs
+output/query.sql
+output/tokens.json
+output/ast.json
+output/semantic.json
+output/query_tree.json
+output/optimized.json
+output/execution_plan.json
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
