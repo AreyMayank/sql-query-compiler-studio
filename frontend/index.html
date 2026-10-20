@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SQL Query Compiler & Execution Plan Visualizer</title>
+    <title>SQL Query Compiler Studio</title>
     <!-- Outfit and Fira Code Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Main Style Sheet -->
@@ -19,19 +19,29 @@
             theme: 'dark',
             startOnLoad: false,
             securityLevel: 'loose',
+            themeVariables: {
+                primaryColor: '#18181f',
+                primaryTextColor: '#f2f2f5',
+                primaryBorderColor: '#00d4aa',
+                lineColor: '#00d4aa',
+                edgeLabelBackground: '#1f1f28',
+                clusterBkg: '#1f1f28'
+            },
             flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'basis' }
         });
     </script>
 </head>
 <body>
-    <div class="glass-bg"></div>
+
 
     <header class="app-header">
         <div class="logo">
-            <i class="fa-solid fa-microchip logo-icon"></i>
+            <div class="logo-icon">
+                <i class="fa-solid fa-terminal"></i>
+            </div>
             <div>
-                <h1>SQL Query Compiler</h1>
-                <p>Educational Compiler Construction Visualizer</p>
+                <h1>SQL Query Compiler Studio</h1>
+                <p>Flex &middot; Bison &middot; ANSI C &middot; Python Flask</p>
             </div>
         </div>
         <div class="status-panel">
@@ -254,7 +264,7 @@
     </main>
 
     <footer class="app-footer">
-        <p>&copy; 2026 Interactive SQL Compiler. Built using Flex, Bison, C, and Flask.</p>
+        <span>sql-query-compiler-studio &mdash; Flex &middot; Bison &middot; ANSI C &middot; Python Flask</span>
     </footer>
 
     <script src="js/app.js"></script>

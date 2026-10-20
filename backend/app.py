@@ -42,28 +42,44 @@ def update_schema():
 def get_samples():
     samples = [
         {
-            "title": "1. Standard Query (Full Pipeline)",
-            "query": "SELECT id, name, age FROM students WHERE age >= 18 ORDER BY age ASC LIMIT 10;"
+            "title": "1. Students — Full Pipeline",
+            "query": "SELECT id, name, age, gpa FROM students WHERE age >= 18 ORDER BY gpa DESC LIMIT 5;"
         },
         {
-            "title": "2. Constant Folding & Boolean Simplification",
+            "title": "2. Students — Major & City Filter",
+            "query": "SELECT name, major, city FROM students WHERE age > 20 ORDER BY name ASC LIMIT 10;"
+        },
+        {
+            "title": "3. Constant Folding & Boolean Simplification",
             "query": "SELECT name, gpa FROM students WHERE 1 = 1 AND age > 20 ORDER BY gpa DESC LIMIT 5;"
         },
         {
-            "title": "3. Duplicate Condition & Column Warning",
+            "title": "4. Duplicate Condition & Column Warning",
             "query": "SELECT name, name, age FROM students WHERE age > 18 AND age > 18;"
         },
         {
-            "title": "4. Semantic Error (Column Not Found)",
+            "title": "5. Employees — High Salary Filter",
+            "query": "SELECT name, salary, department, role FROM employees WHERE salary > 80000 ORDER BY salary DESC LIMIT 5;"
+        },
+        {
+            "title": "6. Employees — By Experience",
+            "query": "SELECT name, role, years_exp FROM employees WHERE years_exp >= 5 ORDER BY years_exp DESC LIMIT 8;"
+        },
+        {
+            "title": "7. Courses — Credits Filter",
+            "query": "SELECT title, credits, instructor FROM courses WHERE credits >= 4 ORDER BY title ASC LIMIT 10;"
+        },
+        {
+            "title": "8. Orders — High Value Orders",
+            "query": "SELECT customer, product, amount FROM orders WHERE amount > 100 ORDER BY amount DESC LIMIT 5;"
+        },
+        {
+            "title": "9. Semantic Error (Column Not Found)",
             "query": "SELECT unknown_col, name FROM students WHERE age > 20;"
         },
         {
-            "title": "5. Semantic Error (Table Not Found)",
+            "title": "10. Semantic Error (Table Not Found)",
             "query": "SELECT id, title FROM non_existing_table;"
-        },
-        {
-            "title": "6. Employees Table Query",
-            "query": "SELECT name, salary, department FROM employees WHERE salary > 50000 ORDER BY salary DESC LIMIT 3;"
         }
     ]
     return jsonify(samples)

@@ -2,42 +2,86 @@
   "tables": {
     "students": {
       "columns": {
-        "id": "INT",
-        "name": "VARCHAR",
-        "age": "INT",
-        "gpa": "FLOAT",
+        "id":        "INT",
+        "name":      "VARCHAR",
+        "age":       "INT",
+        "gpa":       "FLOAT",
+        "major":     "VARCHAR",
+        "city":      "VARCHAR",
         "is_active": "BOOLEAN"
       },
       "data": [
-        { "id": 1, "name": "Alice Smith", "age": 20, "gpa": 3.8, "is_active": "TRUE" },
-        { "id": 2, "name": "Bob Jones", "age": 19, "gpa": 3.2, "is_active": "FALSE" },
-        { "id": 3, "name": "Charlie Brown", "age": 22, "gpa": 3.9, "is_active": "TRUE" }
+        { "id": 1,  "name": "Alice Smith",      "age": 20, "gpa": 3.8, "major": "Computer Science",   "city": "Austin",       "is_active": "TRUE"  },
+        { "id": 2,  "name": "Bob Jones",         "age": 19, "gpa": 3.2, "major": "Mathematics",        "city": "Denver",       "is_active": "TRUE"  },
+        { "id": 3,  "name": "Charlie Brown",     "age": 22, "gpa": 3.9, "major": "Computer Science",   "city": "Seattle",      "is_active": "TRUE"  },
+        { "id": 4,  "name": "Diana Patel",       "age": 21, "gpa": 3.5, "major": "Electrical Eng.",    "city": "Boston",       "is_active": "FALSE" },
+        { "id": 5,  "name": "Ethan Lee",         "age": 23, "gpa": 2.9, "major": "Physics",            "city": "Chicago",      "is_active": "TRUE"  },
+        { "id": 6,  "name": "Fatima Malik",      "age": 20, "gpa": 4.0, "major": "Computer Science",   "city": "San Jose",     "is_active": "TRUE"  },
+        { "id": 7,  "name": "George Kim",        "age": 24, "gpa": 3.1, "major": "Mechanical Eng.",    "city": "Houston",      "is_active": "FALSE" },
+        { "id": 8,  "name": "Hannah Carter",     "age": 19, "gpa": 3.7, "major": "Mathematics",        "city": "New York",     "is_active": "TRUE"  },
+        { "id": 9,  "name": "Ivan Petrov",       "age": 22, "gpa": 2.6, "major": "Chemistry",          "city": "Portland",     "is_active": "TRUE"  },
+        { "id": 10, "name": "Julia Chen",        "age": 21, "gpa": 3.95,"major": "Computer Science",   "city": "San Francisco","is_active": "TRUE"  }
       ]
     },
     "employees": {
       "columns": {
-        "id": "INT",
-        "name": "VARCHAR",
-        "salary": "FLOAT",
+        "id":         "INT",
+        "name":       "VARCHAR",
+        "salary":     "FLOAT",
         "department": "VARCHAR",
-        "is_active": "BOOLEAN"
+        "role":       "VARCHAR",
+        "years_exp":  "INT",
+        "is_active":  "BOOLEAN"
       },
       "data": [
-        { "id": 101, "name": "Diana Prince", "salary": 75000.0, "department": "HR", "is_active": "TRUE" },
-        { "id": 102, "name": "Bruce Wayne", "salary": 120000.0, "department": "R&D", "is_active": "TRUE" },
-        { "id": 103, "name": "Clark Kent", "salary": 45000.0, "department": "Editorial", "is_active": "FALSE" }
+        { "id": 101, "name": "Diana Prince",    "salary": 75000.0,  "department": "HR",            "role": "HR Manager",        "years_exp": 5,  "is_active": "TRUE"  },
+        { "id": 102, "name": "Bruce Wayne",     "salary": 120000.0, "department": "R&D",           "role": "Senior Engineer",   "years_exp": 10, "is_active": "TRUE"  },
+        { "id": 103, "name": "Clark Kent",      "salary": 45000.0,  "department": "Editorial",     "role": "Content Writer",    "years_exp": 2,  "is_active": "FALSE" },
+        { "id": 104, "name": "Natasha Romanov", "salary": 98000.0,  "department": "Security",      "role": "Security Lead",     "years_exp": 8,  "is_active": "TRUE"  },
+        { "id": 105, "name": "Tony Stark",      "salary": 250000.0, "department": "R&D",           "role": "CTO",               "years_exp": 15, "is_active": "TRUE"  },
+        { "id": 106, "name": "Steve Rogers",    "salary": 82000.0,  "department": "Operations",    "role": "Ops Manager",       "years_exp": 6,  "is_active": "TRUE"  },
+        { "id": 107, "name": "Wanda Maximoff",  "salary": 67000.0,  "department": "Engineering",   "role": "Backend Developer", "years_exp": 3,  "is_active": "TRUE"  },
+        { "id": 108, "name": "Peter Parker",    "salary": 52000.0,  "department": "Engineering",   "role": "Junior Developer",  "years_exp": 1,  "is_active": "FALSE" },
+        { "id": 109, "name": "Lena Oduya",      "salary": 91000.0,  "department": "Finance",       "role": "Financial Analyst", "years_exp": 7,  "is_active": "TRUE"  },
+        { "id": 110, "name": "Marcus Webb",     "salary": 110000.0, "department": "R&D",           "role": "ML Engineer",       "years_exp": 9,  "is_active": "TRUE"  }
       ]
     },
     "courses": {
       "columns": {
-        "course_id": "INT",
-        "title": "VARCHAR",
-        "credits": "INT"
+        "course_id":  "INT",
+        "title":      "VARCHAR",
+        "credits":    "INT",
+        "department": "VARCHAR",
+        "instructor": "VARCHAR"
       },
       "data": [
-        { "course_id": 301, "title": "Database Systems", "credits": 4 },
-        { "course_id": 302, "title": "Compiler Construction", "credits": 4 },
-        { "course_id": 303, "title": "Operating Systems", "credits": 3 }
+        { "course_id": 301, "title": "Database Systems",          "credits": 4, "department": "CS",  "instructor": "Dr. Gray"   },
+        { "course_id": 302, "title": "Compiler Construction",     "credits": 4, "department": "CS",  "instructor": "Dr. Aho"    },
+        { "course_id": 303, "title": "Operating Systems",         "credits": 3, "department": "CS",  "instructor": "Dr. Tanenbaum" },
+        { "course_id": 304, "title": "Algorithms & Complexity",   "credits": 4, "department": "CS",  "instructor": "Dr. Cormen" },
+        { "course_id": 305, "title": "Linear Algebra",            "credits": 3, "department": "MATH","instructor": "Dr. Strang" },
+        { "course_id": 306, "title": "Computer Networks",         "credits": 3, "department": "CS",  "instructor": "Dr. Kurose" },
+        { "course_id": 307, "title": "Machine Learning",          "credits": 4, "department": "CS",  "instructor": "Dr. Ng"     },
+        { "course_id": 308, "title": "Discrete Mathematics",      "credits": 3, "department": "MATH","instructor": "Dr. Rosen"  }
+      ]
+    },
+    "orders": {
+      "columns": {
+        "order_id":   "INT",
+        "customer":   "VARCHAR",
+        "product":    "VARCHAR",
+        "amount":     "FLOAT",
+        "quantity":   "INT",
+        "status":     "VARCHAR"
+      },
+      "data": [
+        { "order_id": 1001, "customer": "Alice Smith",  "product": "Laptop Pro",     "amount": 1299.99, "quantity": 1, "status": "shipped"   },
+        { "order_id": 1002, "customer": "Bob Jones",    "product": "Wireless Mouse",  "amount": 29.99,   "quantity": 3, "status": "delivered" },
+        { "order_id": 1003, "customer": "Charlie Brown","product": "Mechanical Keyboard","amount": 149.99,"quantity": 1, "status": "pending"   },
+        { "order_id": 1004, "customer": "Diana Patel",  "product": "Monitor 27in",    "amount": 399.99,  "quantity": 2, "status": "delivered" },
+        { "order_id": 1005, "customer": "Ethan Lee",    "product": "USB-C Hub",       "amount": 49.99,   "quantity": 1, "status": "cancelled" },
+        { "order_id": 1006, "customer": "Fatima Malik", "product": "Laptop Pro",      "amount": 1299.99, "quantity": 1, "status": "shipped"   },
+        { "order_id": 1007, "customer": "George Kim",   "product": "SSD 1TB",         "amount": 89.99,   "quantity": 4, "status": "delivered" }
       ]
     }
   }
