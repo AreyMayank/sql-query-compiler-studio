@@ -1,0 +1,14 @@
+{
+  "name": "sql-query-compiler-studio",
+  "version": "1.0.0",
+  "description": "Interactive SQL Query Compiler & Execution Plan Visualizer",
+  "scripts": {
+    "dev": "python backend/app.py",
+    "start": "python backend/app.py",
+    "install-deps": "pip install -r requirements.txt",
+    "setup": "pip install -r requirements.txt && python backend/app.py"
+  },
+  "keywords": ["sql", "compiler", "flask", "visualizer"],
+  "author": "",
+  "license": "MIT"
+}
