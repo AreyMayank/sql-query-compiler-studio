@@ -1,4 +1,4 @@
-# SQL Query Compiler Studio
+﻿# SQL Query Compiler Studio
 
 > An educational **Compiler Construction** project that demonstrates how modern relational database systems process SQL queries — from raw text to physical execution plans — through a full 6-stage compiler pipeline.
 
@@ -11,55 +11,67 @@
 
 ---
 
+## Overview
+
+SQL Query Compiler Studio is an interactive, browser-based tool that compiles SQL `SELECT` queries through a complete 6-stage compiler pipeline and visualizes the output of every stage in real time. It is built as a **Compiler Construction** course project to make abstract compiler theory tangible and explorable.
+
+**What you can do:**
+- Type any SQL query and watch it flow through Lexer -> Parser -> Semantic -> Query Tree -> Optimizer -> Execution Plan
+- Load 27 built-in sample queries covering valid queries, optimizer demos, and error cases at every phase
+- Browse and edit the live database schema directly in the UI
+- See interactive AST and Query Tree diagrams powered by Mermaid.js
+- Observe error detection at the correct compiler phase (lexical, syntax, or semantic)
+
+---
+
 ## System Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        BROWSER  (Frontend UI)                           │
-│                                                                         │
-│  ┌────────────────────────────────────────────────────────────────────┐ │
-│  │  index.html  +  css/style.css  +  js/app.js                       │ │
-│  │                                                                    │ │
-│  │  * CodeMirror-style query editor                                   │ │
-│  │  * 6 built-in sample queries                                       │ │
-│  │  * Live schema viewer & editor (tables, columns, types)            │ │
-│  │  * Tabbed results: Tokens | AST | Semantic | Query Tree            │ │
-│  │                    Optimizer | Execution Plan                      │ │
-│  │  * Mermaid.js -> interactive AST & Query Tree graph renders        │ │
-│  └────────────────────────────────────────────────────────────────────┘ │
-│                             |  HTTP / REST API                          │
-└─────────────────────────────┼───────────────────────────────────────────┘
++---------------------------------------------------------------------------+
+|                        BROWSER  (Frontend UI)                             |
+|                                                                           |
+|  +-----------------------------------------------------------------------+|
+|  |  index.html  +  css/style.css  +  js/app.js                          ||
+|  |                                                                       ||
+|  |  * SQL query editor with live syntax highlighting                     ||
+|  |  * 27 built-in sample queries (valid, optimizer, error demos)         ||
+|  |  * Live schema browser & editor (tables, columns, types, data)        ||
+|  |  * 6-stage pipeline stepper with individual result panels             ||
+|  |  * Mermaid.js -> interactive AST & Query Tree graph renders           ||
+|  +-----------------------------------------------------------------------+|
+|                             |  HTTP / REST API                            |
++-----------------------------+---------------------------------------------+
                               |
-┌─────────────────────────────v───────────────────────────────────────────┐
-│                     FLASK SERVER  (backend/app.py)                      │
-│                                                                         │
-│  Static File Server  <--  serves frontend/                              │
-│                                                                         │
-│  REST Endpoints:                                                        │
-│  * GET  /api/schema     <- load schema.json                             │
-│  * POST /api/schema     <- save edited schema                           │
-│  * GET  /api/samples    <- 6 built-in example queries                   │
-│  * POST /api/compile    <- run compiler pipeline, return JSON phases    │
-│                                                                         │
-│  ┌──────────────────────────────────────────────────────────────────┐  │
-│  │               COMPILER ENGINE (dual-mode)                        │  │
-│  │                                                                  │  │
-│  │  [1] C Binary (sql_compiler.exe)    <- preferred (if built)      │  │
-│  │      Flex lexer.l -> Bison parser.y -> ast.c -> semantic.c       │  │
-│  │      -> query_tree.c -> optimizer.c -> execution_plan.c          │  │
-│  │                                                                  │  │
-│  │  [2] Python Fallback (py_compiler.py) <- always available        │  │
-│  │      Full 6-stage pipeline in pure Python, zero extra deps       │  │
-│  └──────────────────────────────────────────────────────────────────┘  │
-│                                                                         │
-│  output/   <- JSON files written per compile request                   │
-│  schema/   <- schema.json (database schema / catalog)                  │
-└─────────────────────────────────────────────────────────────────────────┘
++-----------------------------v---------------------------------------------+
+|                     FLASK SERVER  (backend/app.py)                        |
+|                                                                           |
+|  Static File Server  <--  serves frontend/                                |
+|                                                                           |
+|  REST Endpoints:                                                          |
+|  * GET  /api/schema     <- load schema.json                               |
+|  * POST /api/schema     <- save edited schema                             |
+|  * GET  /api/samples    <- 27 built-in example queries                    |
+|  * POST /api/compile    <- run compiler pipeline, return JSON phases      |
+|                                                                           |
+|  +-----------------------------------------------------------------------+|
+|  |               COMPILER ENGINE (dual-mode)                             ||
+|  |                                                                       ||
+|  |  [1] C Binary (sql_compiler.exe)    <- preferred (if built)           ||
+|  |      Flex lexer.l -> Bison parser.y -> ast.c -> semantic.c            ||
+|  |      -> query_tree.c -> optimizer.c -> execution_plan.c               ||
+|  |                                                                       ||
+|  |  [2] Python Fallback (py_compiler.py) <- always available             ||
+|  |      Full 6-stage pipeline in pure Python, zero extra deps            ||
+|  +-----------------------------------------------------------------------+|
+|                                                                           |
+|  output/   <- JSON files written per compile request                     |
+|  schema/   <- schema.json (database schema / catalog)                    |
++---------------------------------------------------------------------------+
 ```
 
 ---
 
-## Compiler Pipeline — Stage by Stage
+## Compiler Pipeline -- Stage by Stage
 
 ```
 SQL Query String
@@ -70,15 +82,16 @@ SQL Query String
 |                                   |
 |  Regex-based tokenizer            |
 |  Token types:                     |
-|   KEYWORD     (SELECT, FROM, ...)  |
+|   KEYWORD     (SELECT, FROM, ...) |
 |   IDENTIFIER  (table / col names) |
 |   INT_LITERAL / FLOAT_LITERAL     |
 |   STRING_LITERAL  ('...')         |
 |   BOOL_LITERAL    (TRUE / FALSE)  |
 |   OPERATOR   (<= >= != = < >)     |
-|   DELIMITER  (, ; * ( ) )        |
+|   DELIMITER  (, ; * ( ) )         |
 |  Tracks: line + column per token  |
 |                                   |
+|  Errors: illegal characters       |
 |  Output -> output/tokens.json     |
 +---------------+-------------------+
                 |
@@ -98,6 +111,7 @@ SQL Query String
 |   ORDER_BY_CLAUSE                 |
 |   LIMIT_CLAUSE                    |
 |                                   |
+|  Errors: malformed grammar        |
 |  Output -> output/ast.json        |
 +---------------+-------------------+
                 |
@@ -124,11 +138,11 @@ SQL Query String
 |           (Relational Algebra)    |
 |                                   |
 |  Converts AST to RA operators:    |
+|   SCAN             (table access) |
 |   SELECTION  sigma (WHERE)        |
 |   PROJECTION pi    (SELECT cols)  |
 |   SORT       tau   (ORDER BY)     |
 |   LIMIT      L                    |
-|   SCAN             (table access) |
 |                                   |
 |  Unoptimized bottom-up tree       |
 |  Output -> output/query_tree.json |
@@ -183,7 +197,7 @@ SQL Query String
 | Layer | Technology | Role |
 |---|---|---|
 | **Compiler (primary)** | ANSI C99, Flex, GNU Bison, GCC | Full pipeline compiled to `sql_compiler.exe` |
-| **Compiler (fallback)** | Python 3 stdlib only | `py_compiler.py` — same 6-stage pipeline, zero extra deps |
+| **Compiler (fallback)** | Python 3 stdlib only | `py_compiler.py` -- same 6-stage pipeline, zero extra deps |
 | **Backend API** | Python Flask 3.x | REST API server + static file host |
 | **Frontend** | Vanilla HTML5 / CSS3 / JavaScript ES2020 | Query editor and result visualizer |
 | **Graph Rendering** | Mermaid.js (CDN) | Interactive AST and Query Tree diagrams |
@@ -243,15 +257,16 @@ sql-query-compiler-studio/
 
 ## Database Schema
 
-The default `schema/schema.json` ships with **3 tables** and can be edited live via the Schema panel in the UI:
+The default `schema/schema.json` ships with **4 tables** and can be edited live via the Schema panel in the UI:
 
-| Table | Columns | Column Types |
+| Table | Columns | Sample Rows |
 |---|---|---|
-| `students` | `id`, `name`, `age`, `gpa`, `is_active` | INT, VARCHAR, INT, FLOAT, BOOLEAN |
-| `employees` | `id`, `name`, `salary`, `department`, `is_active` | INT, VARCHAR, FLOAT, VARCHAR, BOOLEAN |
-| `courses` | `course_id`, `title`, `credits` | INT, VARCHAR, INT |
+| `students` | `id`, `name`, `age`, `gpa`, `major`, `email`, `enrollment_year`, `is_active` | 10 |
+| `employees` | `id`, `name`, `salary`, `department`, `position`, `hire_year`, `manager_id`, `is_active` | 10 |
+| `courses` | `course_id`, `title`, `credits`, `department`, `instructor`, `max_seats`, `is_open` | 8 |
+| `orders` | `order_id`, `customer_name`, `product`, `quantity`, `unit_price`, `status`, `order_year`, `is_paid` | 10 |
 
-> Click **"Schema"** in the UI sidebar to add/remove tables or columns at runtime — changes are persisted to `schema.json` via the API.
+> Click **"Edit Schema"** in the UI to add or remove tables and columns at runtime. Changes are persisted to `schema.json` via the API.
 
 ---
 
@@ -259,23 +274,23 @@ The default `schema/schema.json` ships with **3 tables** and can be edited live 
 
 ### Prerequisites
 
-- **Python 3.8+** — required (Flask server + fallback compiler)
-- **Node.js / npm** — optional (only for `npm run dev`)
-- **MSYS2 + GCC + Flex + Bison** — optional (only to build the C engine)
+- **Python 3.8+** -- required (Flask server + fallback compiler)
+- **Node.js / npm** -- optional (only for `npm run dev`)
+- **MSYS2 + GCC + Flex + Bison** -- optional (only to build the C engine)
 
-### Option 1 — npm (recommended if Node.js is installed)
+### Option 1 -- npm (recommended if Node.js is installed)
 
 ```powershell
 npm run dev
 ```
 
-### Option 2 — Python directly
+### Option 2 -- Python directly
 
 ```powershell
 python backend/app.py
 ```
 
-### Option 3 — Windows double-click
+### Option 3 -- Windows double-click
 
 ```
 start.bat
@@ -283,7 +298,7 @@ start.bat
 
 Auto-installs Python deps, then starts the server.
 
-### Option 4 — Manual
+### Option 4 -- Manual
 
 ```powershell
 pip install -r requirements.txt
@@ -323,7 +338,7 @@ Flask automatically detects `sql_compiler.exe` and prefers it over the Python fa
 | `GET` | `/` | Serves `frontend/index.html` |
 | `GET` | `/api/schema` | Returns current `schema.json` |
 | `POST` | `/api/schema` | Persists updated schema |
-| `GET` | `/api/samples` | Returns 6 built-in example queries |
+| `GET` | `/api/samples` | Returns 27 built-in example queries |
 | `POST` | `/api/compile` | Compiles SQL query; returns all 6 phase outputs |
 
 **Compile Request**
@@ -364,14 +379,59 @@ Content-Type: application/json
 
 ## Built-in Sample Queries
 
+27 queries are included, organized into four categories:
+
+### Valid Queries -- Full Pipeline (1-12)
+
+| # | Title | Table |
+|---|---|---|
+| 1 | Students - Filter by Age | `students` |
+| 2 | Students - High GPA List | `students` |
+| 3 | Students - Active Members | `students` |
+| 4 | Students - Enrolled After 2022 | `students` |
+| 5 | Employees - High Salary Filter | `employees` |
+| 6 | Employees - Active Staff | `employees` |
+| 7 | Employees - Senior Earners | `employees` |
+| 8 | Courses - Open Courses | `courses` |
+| 9 | Courses - High Credit Courses | `courses` |
+| 10 | Orders - Paid Orders | `orders` |
+| 11 | Orders - Large Quantity Orders | `orders` |
+| 12 | Orders - Recent Year Filter | `orders` |
+
+### Optimizer Demos (13-15)
+
 | # | Title | What it demonstrates |
 |---|---|---|
-| 1 | Standard Query (Full Pipeline) | All 6 stages end-to-end |
-| 2 | Constant Folding & Boolean Simplification | `1 = 1 AND cond` collapsed to `cond` |
-| 3 | Duplicate Condition & Column Warning | Semantic warning detection |
-| 4 | Semantic Error — Column Not Found | Error reporting on unknown column |
-| 5 | Semantic Error — Table Not Found | Error reporting on unknown table |
-| 6 | Employees Table Query | Multi-type schema, salary filter |
+| 13 | Optimizer - Constant Folding (1=1) | `1 = 1 AND cond` collapsed to `cond` |
+| 14 | Optimizer - Duplicate Column Warning | Same column selected twice triggers warning |
+| 15 | Optimizer - Duplicate WHERE Condition | Redundant `AND` condition detected |
+
+### Lexical Errors -- Stage 1 (16-18)
+
+| # | Title | Error trigger |
+|---|---|---|
+| 16 | Lexical Error - Illegal Character (@) | `@` in column reference |
+| 17 | Lexical Error - Hash Symbol in Query (#) | `#` used as operator |
+| 18 | Lexical Error - Dollar Sign in Identifier | `$` prefix on column name |
+
+### Syntax Errors -- Stage 2 (19-22)
+
+| # | Title | Error trigger |
+|---|---|---|
+| 19 | Syntax Error - Missing FROM Clause | No `FROM` keyword |
+| 20 | Syntax Error - Missing SELECT Keyword | Query starts with column name |
+| 21 | Syntax Error - Incomplete ORDER BY | `ORDER` without `BY` |
+| 22 | Syntax Error - No Column List | `SELECT FROM ...` |
+
+### Semantic Errors -- Stage 3 (23-27)
+
+| # | Title | Error trigger |
+|---|---|---|
+| 23 | Semantic Error - Column Not Found | Unknown column in SELECT |
+| 24 | Semantic Error - Table Not Found | Non-existent table |
+| 25 | Semantic Error - Invalid ORDER BY Column | Unknown column in ORDER BY |
+| 26 | Semantic Error - Multiple Bad Columns | Several unknown columns |
+| 27 | Semantic Error - Wrong Table for Column | Column from a different table |
 
 ---
 
@@ -401,4 +461,4 @@ python backend/compiler/test_compile.py
 
 ## License
 
-MIT — Built for educational purposes as a Compiler Construction course project.
+MIT -- Built for educational purposes as a Compiler Construction course project.

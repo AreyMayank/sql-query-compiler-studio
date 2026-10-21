@@ -6,12 +6,22 @@
         "name": "VARCHAR",
         "age": "INT",
         "gpa": "FLOAT",
+        "major": "VARCHAR",
+        "email": "VARCHAR",
+        "enrollment_year": "INT",
         "is_active": "BOOLEAN"
       },
       "data": [
-        { "id": 1, "name": "Alice Smith", "age": 20, "gpa": 3.8, "is_active": "TRUE" },
-        { "id": 2, "name": "Bob Jones", "age": 19, "gpa": 3.2, "is_active": "FALSE" },
-        { "id": 3, "name": "Charlie Brown", "age": 22, "gpa": 3.9, "is_active": "TRUE" }
+        { "id": 1,  "name": "Alice Smith",    "age": 20, "gpa": 3.8, "major": "Computer Science", "email": "alice@uni.edu",   "enrollment_year": 2023, "is_active": "TRUE"  },
+        { "id": 2,  "name": "Bob Jones",      "age": 19, "gpa": 3.2, "major": "Mathematics",      "email": "bob@uni.edu",     "enrollment_year": 2024, "is_active": "FALSE" },
+        { "id": 3,  "name": "Charlie Brown",  "age": 22, "gpa": 3.9, "major": "Physics",          "email": "charlie@uni.edu", "enrollment_year": 2021, "is_active": "TRUE"  },
+        { "id": 4,  "name": "Diana Lee",      "age": 21, "gpa": 3.5, "major": "Computer Science", "email": "diana@uni.edu",   "enrollment_year": 2022, "is_active": "TRUE"  },
+        { "id": 5,  "name": "Ethan Hunt",     "age": 23, "gpa": 2.9, "major": "Engineering",     "email": "ethan@uni.edu",   "enrollment_year": 2020, "is_active": "FALSE" },
+        { "id": 6,  "name": "Fiona Green",    "age": 18, "gpa": 4.0, "major": "Mathematics",      "email": "fiona@uni.edu",   "enrollment_year": 2024, "is_active": "TRUE"  },
+        { "id": 7,  "name": "George Han",     "age": 20, "gpa": 3.6, "major": "Physics",          "email": "george@uni.edu",  "enrollment_year": 2023, "is_active": "TRUE"  },
+        { "id": 8,  "name": "Hannah Patel",   "age": 22, "gpa": 3.1, "major": "Engineering",     "email": "hannah@uni.edu",  "enrollment_year": 2021, "is_active": "FALSE" },
+        { "id": 9,  "name": "Ivan Petrov",    "age": 25, "gpa": 3.7, "major": "Computer Science", "email": "ivan@uni.edu",    "enrollment_year": 2019, "is_active": "TRUE"  },
+        { "id": 10, "name": "Julia Roberts",  "age": 19, "gpa": 3.4, "major": "Biology",          "email": "julia@uni.edu",   "enrollment_year": 2024, "is_active": "TRUE"  }
       ]
     },
     "employees": {
@@ -20,24 +30,67 @@
         "name": "VARCHAR",
         "salary": "FLOAT",
         "department": "VARCHAR",
+        "position": "VARCHAR",
+        "hire_year": "INT",
+        "manager_id": "INT",
         "is_active": "BOOLEAN"
       },
       "data": [
-        { "id": 101, "name": "Diana Prince", "salary": 75000.0, "department": "HR", "is_active": "TRUE" },
-        { "id": 102, "name": "Bruce Wayne", "salary": 120000.0, "department": "R&D", "is_active": "TRUE" },
-        { "id": 103, "name": "Clark Kent", "salary": 45000.0, "department": "Editorial", "is_active": "FALSE" }
+        { "id": 101, "name": "Diana Prince",   "salary": 75000.0,  "department": "HR",        "position": "HR Manager",       "hire_year": 2018, "manager_id": 0,   "is_active": "TRUE"  },
+        { "id": 102, "name": "Bruce Wayne",    "salary": 120000.0, "department": "R&D",       "position": "Lead Researcher",  "hire_year": 2015, "manager_id": 0,   "is_active": "TRUE"  },
+        { "id": 103, "name": "Clark Kent",     "salary": 45000.0,  "department": "Editorial", "position": "Journalist",       "hire_year": 2020, "manager_id": 101, "is_active": "FALSE" },
+        { "id": 104, "name": "Tony Stark",     "salary": 200000.0, "department": "R&D",       "position": "CTO",              "hire_year": 2010, "manager_id": 0,   "is_active": "TRUE"  },
+        { "id": 105, "name": "Natasha Romanov","salary": 95000.0,  "department": "Security",  "position": "Security Lead",    "hire_year": 2016, "manager_id": 102, "is_active": "TRUE"  },
+        { "id": 106, "name": "Peter Parker",   "salary": 55000.0,  "department": "R&D",       "position": "Junior Dev",       "hire_year": 2022, "manager_id": 104, "is_active": "TRUE"  },
+        { "id": 107, "name": "Steve Rogers",   "salary": 88000.0,  "department": "Operations","position": "Ops Director",     "hire_year": 2017, "manager_id": 0,   "is_active": "FALSE" },
+        { "id": 108, "name": "Wanda Maximoff", "salary": 67000.0,  "department": "HR",        "position": "HR Specialist",    "hire_year": 2019, "manager_id": 101, "is_active": "TRUE"  },
+        { "id": 109, "name": "Thor Odinson",   "salary": 110000.0, "department": "Security",  "position": "Security Manager", "hire_year": 2014, "manager_id": 0,   "is_active": "TRUE"  },
+        { "id": 110, "name": "Loki Laufeyson", "salary": 72000.0,  "department": "Editorial", "position": "Senior Writer",    "hire_year": 2021, "manager_id": 103, "is_active": "FALSE" }
       ]
     },
     "courses": {
       "columns": {
         "course_id": "INT",
         "title": "VARCHAR",
-        "credits": "INT"
+        "credits": "INT",
+        "department": "VARCHAR",
+        "instructor": "VARCHAR",
+        "max_seats": "INT",
+        "is_open": "BOOLEAN"
       },
       "data": [
-        { "course_id": 301, "title": "Database Systems", "credits": 4 },
-        { "course_id": 302, "title": "Compiler Construction", "credits": 4 },
-        { "course_id": 303, "title": "Operating Systems", "credits": 3 }
+        { "course_id": 301, "title": "Database Systems",        "credits": 4, "department": "CS",   "instructor": "Dr. Ramanujan", "max_seats": 40, "is_open": "TRUE"  },
+        { "course_id": 302, "title": "Compiler Construction",   "credits": 4, "department": "CS",   "instructor": "Dr. Knuth",     "max_seats": 35, "is_open": "TRUE"  },
+        { "course_id": 303, "title": "Operating Systems",       "credits": 3, "department": "CS",   "instructor": "Dr. Tanenbaum", "max_seats": 50, "is_open": "FALSE" },
+        { "course_id": 304, "title": "Data Structures",         "credits": 3, "department": "CS",   "instructor": "Dr. Cormen",    "max_seats": 60, "is_open": "TRUE"  },
+        { "course_id": 305, "title": "Linear Algebra",          "credits": 3, "department": "MATH", "instructor": "Dr. Gilbert",   "max_seats": 45, "is_open": "TRUE"  },
+        { "course_id": 306, "title": "Discrete Mathematics",    "credits": 3, "department": "MATH", "instructor": "Dr. Rosen",     "max_seats": 55, "is_open": "TRUE"  },
+        { "course_id": 307, "title": "Machine Learning",        "credits": 4, "department": "CS",   "instructor": "Dr. Ng",        "max_seats": 30, "is_open": "FALSE" },
+        { "course_id": 308, "title": "Computer Networks",       "credits": 3, "department": "CS",   "instructor": "Dr. Forouzan",  "max_seats": 40, "is_open": "TRUE"  }
+      ]
+    },
+    "orders": {
+      "columns": {
+        "order_id": "INT",
+        "customer_name": "VARCHAR",
+        "product": "VARCHAR",
+        "quantity": "INT",
+        "unit_price": "FLOAT",
+        "status": "VARCHAR",
+        "order_year": "INT",
+        "is_paid": "BOOLEAN"
+      },
+      "data": [
+        { "order_id": 1001, "customer_name": "Alice Smith",    "product": "Laptop",    "quantity": 1, "unit_price": 1299.99, "status": "Shipped",   "order_year": 2024, "is_paid": "TRUE"  },
+        { "order_id": 1002, "customer_name": "Bob Jones",      "product": "Monitor",   "quantity": 2, "unit_price": 349.50,  "status": "Delivered", "order_year": 2024, "is_paid": "TRUE"  },
+        { "order_id": 1003, "customer_name": "Charlie Brown",  "product": "Keyboard",  "quantity": 3, "unit_price": 89.99,   "status": "Pending",   "order_year": 2025, "is_paid": "FALSE" },
+        { "order_id": 1004, "customer_name": "Diana Lee",      "product": "Headphones","quantity": 1, "unit_price": 199.00,  "status": "Shipped",   "order_year": 2025, "is_paid": "TRUE"  },
+        { "order_id": 1005, "customer_name": "Ethan Hunt",     "product": "Webcam",    "quantity": 2, "unit_price": 79.95,   "status": "Cancelled", "order_year": 2024, "is_paid": "FALSE" },
+        { "order_id": 1006, "customer_name": "Fiona Green",    "product": "SSD Drive", "quantity": 4, "unit_price": 129.99,  "status": "Delivered", "order_year": 2023, "is_paid": "TRUE"  },
+        { "order_id": 1007, "customer_name": "George Han",     "product": "RAM",       "quantity": 2, "unit_price": 64.50,   "status": "Delivered", "order_year": 2023, "is_paid": "TRUE"  },
+        { "order_id": 1008, "customer_name": "Hannah Patel",   "product": "Laptop",    "quantity": 1, "unit_price": 1499.00, "status": "Pending",   "order_year": 2025, "is_paid": "FALSE" },
+        { "order_id": 1009, "customer_name": "Ivan Petrov",    "product": "Mouse",     "quantity": 5, "unit_price": 29.99,   "status": "Shipped",   "order_year": 2025, "is_paid": "TRUE"  },
+        { "order_id": 1010, "customer_name": "Julia Roberts",  "product": "Monitor",   "quantity": 1, "unit_price": 479.00,  "status": "Delivered", "order_year": 2024, "is_paid": "TRUE"  }
       ]
     }
   }
